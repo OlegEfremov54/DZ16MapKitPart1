@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DZ16MapKitPart1</string>
+    <string name="MAPKIT_API_KEY">15bdc351-90d6-4c6e-b344-a09b9f42c4d7</string>
+    <string name="hello_world">Hello World!</string>
+</resources>
