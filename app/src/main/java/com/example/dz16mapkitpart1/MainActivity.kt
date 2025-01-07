@@ -1,15 +1,14 @@
 package com.example.dz16mapkitpart1
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
+
+import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Canvas
+
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+
 import com.example.dz16mapkitpart1.databinding.ActivityMainBinding
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -17,7 +16,6 @@ import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.PlacemarkMapObject
-import com.yandex.mapkit.map.TextStyle
 import com.yandex.mapkit.search.Response
 import com.yandex.mapkit.search.Session
 import com.yandex.runtime.image.ImageProvider
@@ -25,6 +23,7 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.search.SearchFactory
 import com.yandex.mapkit.search.SearchManagerType
 import com.yandex.mapkit.search.SearchOptions
+import com.yandex.runtime.Error
 
 class MainActivity : AppCompatActivity() {
 
@@ -50,15 +49,16 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
     private fun setApiKey(savedInstanceState: Bundle?) {
-        val haveApiKey: Boolean = savedInstanceState?.getBoolean("haveApiKey") ?:false
+        val haveApiKey: Boolean = savedInstanceState?.getBoolean("haveApiKey") ?: false
         if (!haveApiKey)
-            MapKitFactory.setApiKey("@string.MAPKIT_API_KEY")
+            MapKitFactory.setApiKey(getString(R.string.may_key))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("haveApiKey",true)
+        outState.putBoolean("haveApiKey", true)
     }
 
     override fun onStart() {
@@ -98,10 +98,9 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 
-                override fun onSearchError(p0: com.yandex.runtime.Error) {
+                override fun onSearchError(p0: Error) {
                     Log.d("aaa", "onSearchError: search ERROR")
                 }
-
 
 
             }
@@ -116,19 +115,20 @@ class MainActivity : AppCompatActivity() {
             ImageProvider.fromBitmap(marker)
         )
         placemarkMapObject.opacity = 0.5f
-        }
     }
+
 
     private fun createBitmapFromVector(art: Int): Bitmap? {
         val drawable = ContextCompat.getDrawable(this, art) ?: return null
         val bitmap = Bitmap.createBitmap(
             drawable.intrinsicWidth,
-            drawable.minimumHeight,
+            drawable.intrinsicHeight,
             Bitmap.Config.ARGB_8888
-        )
-        val canvas = android.graphics.Canvas(bitmap)
+        ) ?: return null
+        val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
     }
 
+}
